@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Technician } from '../../models/types';
-import { Star, MapPin } from 'lucide-react';
+import { Star, MapPin, PenTool, MessageSquare } from 'lucide-react';
 
 interface TechnicianCardProps {
   technician: Technician;
@@ -57,12 +57,14 @@ const TechnicianCard: React.FC<TechnicianCardProps> = ({ technician }) => {
             to={`/technicians/${id}`}
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
           >
+            <PenTool className="h-5 w-5 mr-2" />
             View Profile
           </Link>
           <Link
             to={`/messages/new/${id}`}
             className="inline-flex items-center px-4 py-2 border border-primary-500 text-sm font-medium rounded-md text-primary-500 bg-white hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
           >
+            <MessageSquare className="h-5 w-5 mr-2" />
             Contact
           </Link>
         </div>

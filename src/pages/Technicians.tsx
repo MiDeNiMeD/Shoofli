@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Technician } from '../models/types';
 import TechnicianCard from '../components/common/TechnicianCard';
 import { retrieveData, STORAGE_KEYS } from '../services/storageService';
-import { Search, Filter } from 'lucide-react';
+import { Search, Filter, PenTool } from 'lucide-react';
 
 const Technicians: React.FC = () => {
   const [technicians, setTechnicians] = useState<Technician[]>([]);
@@ -84,7 +84,7 @@ const Technicians: React.FC = () => {
           
           {filteredTechnicians.length === 0 && (
             <div className="col-span-full text-center py-12">
-              <Filter className="mx-auto h-12 w-12 text-gray-400" />
+              <PenTool className="mx-auto h-12 w-12 text-gray-400" />
               <h3 className="mt-2 text-lg font-medium text-gray-900">No technicians found</h3>
               <p className="mt-1 text-gray-500">
                 Try adjusting your search criteria or filters
