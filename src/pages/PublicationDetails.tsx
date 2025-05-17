@@ -3,12 +3,14 @@ import { useParams, Link } from 'react-router-dom';
 import { Publication, Comment, User } from '../models/types';
 import { retrieveData, STORAGE_KEYS, addItem } from '../services/storageService';
 import { useAuth } from '../contexts/AuthContext';
+import { useNotifications } from '../contexts/NotificationContext';
 import { MessageSquare, Calendar, MapPin, User as UserIcon } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 
 const PublicationDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
+  const { addNotification } = useNotifications();
   const [publication, setPublication] = useState<Publication | null>(null);
   const [client, setClient] = useState<User | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
@@ -50,6 +52,14 @@ const PublicationDetails: React.FC = () => {
       addItem(STORAGE_KEYS.COMMENTS, comment);
       setComments(prev => [comment, ...prev]);
       setNewComment('');
+
+      // Send notification to publication owner if it's not their own comment
+      if (publication.clientId !== user.id) {
+        addNotification(
+          `${user.firstName} ${user.lastName} commented on your publication: "${publication.title}"`,
+          'Message'
+        );
+      }
     } catch (err) {
       setError('Failed to post comment');
     }
