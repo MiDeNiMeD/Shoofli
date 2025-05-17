@@ -1,4 +1,4 @@
-import { User, LoginCredentials, RegisterFormData, UserRole } from '../models/types';
+import { User, LoginCredentials, RegisterFormData, UserRole, Technician } from '../models/types';
 import { v4 as uuidv4 } from 'uuid';
 import { storeData, retrieveData, getItemsByFilter, STORAGE_KEYS } from './storageService';
 
@@ -81,8 +81,8 @@ export const register = (formData: RegisterFormData): User => {
     
     // If the role is Technician, save additional fields
     if (role === 'Technician' && formData.specialty && formData.bio) {
-      const technicians = retrieveData<User[]>(STORAGE_KEYS.TECHNICIANS, []);
-      const newTechnician = {
+      const technicians = retrieveData<Technician[]>(STORAGE_KEYS.TECHNICIANS, []);
+      const newTechnician: Technician = {
         ...newUser,
         specialty: formData.specialty,
         bio: formData.bio,
@@ -148,11 +148,11 @@ export const updateCurrentUser = (userData: Partial<User>): User | null => {
       
       // Update in the appropriate role collection as well
       if (updatedUser.role === 'Technician') {
-        const technicians = retrieveData<User[]>(STORAGE_KEYS.TECHNICIANS, []);
+        const technicians = retrieveData<Technician[]>(STORAGE_KEYS.TECHNICIANS, []);
         const techIndex = technicians.findIndex(t => t.id === currentUser.id);
         
         if (techIndex !== -1) {
-          technicians[techIndex] = { ...technicians[techIndex], ...userData };
+          technicians[techIndex] = { ...technicians[techIndex], ...userData } as Technician;
           storeData(STORAGE_KEYS.TECHNICIANS, technicians);
         }
       } else if (updatedUser.role === 'Client') {
@@ -203,7 +203,7 @@ export const approveUser = (userId: string): User | null => {
       
       // Update in the appropriate role collection as well
       if (users[index].role === 'Technician') {
-        const technicians = retrieveData<User[]>(STORAGE_KEYS.TECHNICIANS, []);
+        const technicians = retrieveData<Technician[]>(STORAGE_KEYS.TECHNICIANS, []);
         const techIndex = technicians.findIndex(t => t.id === userId);
         
         if (techIndex !== -1) {
@@ -242,7 +242,7 @@ export const deleteUser = (userId: string): boolean => {
       storeData(STORAGE_KEYS.USERS, updatedUsers);
       
       // Also remove from role-specific collections
-      const technicians = retrieveData<User[]>(STORAGE_KEYS.TECHNICIANS, []);
+      const technicians = retrieveData<Technician[]>(STORAGE_KEYS.TECHNICIANS, []);
       const clients = retrieveData<User[]>(STORAGE_KEYS.CLIENTS, []);
       
       storeData(STORAGE_KEYS.TECHNICIANS, technicians.filter(t => t.id !== userId));

@@ -43,7 +43,7 @@ const TechnicianCard: React.FC<TechnicianCardProps> = ({ technician }) => {
           <div className="text-right">
             <div className="flex items-center justify-end mb-1">
               <Star className="h-5 w-5 text-yellow-400 mr-1" />
-              <span className="font-semibold">{rating.toFixed(1)}</span>
+              <span className="font-semibold">{Number(rating).toFixed(1)}</span>
             </div>
             <p className="text-gray-900 font-bold">${Number(pricePerService).toFixed(2)}</p>
             <p className="text-xs text-gray-500">per service</p>
