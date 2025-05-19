@@ -245,21 +245,21 @@ const Dashboard: React.FC = () => {
               <span className="text-sm font-medium text-primary-700">Manage Users</span>
             </Link>
             <Link
-              to="/admin/publications"
+              to="/admin"
               className="flex flex-col items-center justify-center p-4 bg-primary-50 rounded-lg hover:bg-primary-100"
             >
               <FileText className="h-6 w-6 text-primary-500 mb-2" />
               <span className="text-sm font-medium text-primary-700">Publications</span>
             </Link>
             <Link
-              to="/admin/reports"
+              to="/admin"
               className="flex flex-col items-center justify-center p-4 bg-primary-50 rounded-lg hover:bg-primary-100"
             >
               <Star className="h-6 w-6 text-primary-500 mb-2" />
               <span className="text-sm font-medium text-primary-700">Reviews</span>
             </Link>
             <Link
-              to="/admin/settings"
+              to="/admin"
               className="flex flex-col items-center justify-center p-4 bg-primary-50 rounded-lg hover:bg-primary-100"
             >
               <Settings className="h-6 w-6 text-primary-500 mb-2" />
