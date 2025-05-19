@@ -53,11 +53,12 @@ const PublicationDetails: React.FC = () => {
       setComments(prev => [comment, ...prev]);
       setNewComment('');
 
-      // Send notification to publication owner if it's not their own comment
-      if (publication.clientId !== user.id) {
+      // Only send notification if the commenter is not the publication owner
+      if (user.id !== publication.clientId) {
         addNotification(
           `${user.firstName} ${user.lastName} commented on your publication: "${publication.title}"`,
-          'Message'
+          'Message',
+          publication.clientId // Specify the recipient user ID
         );
       }
     } catch (err) {

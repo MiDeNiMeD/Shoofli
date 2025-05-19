@@ -9,7 +9,8 @@ interface NotificationContextType {
   unreadCount: number;
   addNotification: (
     content: string,
-    type: NotificationType
+    type: NotificationType,
+    userId?: string
   ) => Notification;
   markAsRead: (id: string) => void;
   markAllAsRead: () => void;
@@ -22,7 +23,6 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ childr
   const { user } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   
-  // Load notifications from localStorage when user changes
   useEffect(() => {
     if (user) {
       const allNotifications = retrieveData<Notification[]>(STORAGE_KEYS.NOTIFICATIONS, []);
@@ -35,28 +35,32 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ childr
     }
   }, [user]);
   
-  // Calculate unread count
   const unreadCount = notifications.filter(notification => !notification.isRead).length;
   
   const addNotification = (
     content: string,
-    type: NotificationType
+    type: NotificationType,
+    userId?: string
   ): Notification => {
-    if (!user) {
-      throw new Error('Cannot add notification: No user is logged in');
+    const targetUserId = userId || (user ? user.id : '');
+    
+    if (!targetUserId) {
+      throw new Error('Cannot add notification: No target user specified');
     }
     
     const newNotification: Notification = {
       id: uuidv4(),
-      userId: user.id,
+      userId: targetUserId,
       content,
       type,
       isRead: false,
       createdAt: new Date().toISOString(),
     };
     
-    // Update state
-    setNotifications(prev => [newNotification, ...prev]);
+    // Update state only if it's for the current user
+    if (user && targetUserId === user.id) {
+      setNotifications(prev => [newNotification, ...prev]);
+    }
     
     // Update localStorage
     const allNotifications = retrieveData<Notification[]>(STORAGE_KEYS.NOTIFICATIONS, []);
